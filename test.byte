@@ -8,5 +8,7 @@ PRINT
 READ
 READ
 ADD
-JMP 6
+JMP asd
+asd:
+PRINT
 HALT
