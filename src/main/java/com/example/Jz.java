@@ -10,6 +10,7 @@ public class Jz implements Instruction {
   @Override
   public void exec(Environment env) {
     if (env.pop() == 0) {
+      env.pop();
       env.setPc(address - 1);
     }
   }
