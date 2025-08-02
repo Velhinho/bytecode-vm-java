@@ -1,7 +1,10 @@
-/home/velhinho/Desktop/other/bytecode-vm/src/main/java/com/example/Sub.java
-/home/velhinho/Desktop/other/bytecode-vm/src/main/java/com/example/Environment.java
-/home/velhinho/Desktop/other/bytecode-vm/src/main/java/com/example/Add.java
-/home/velhinho/Desktop/other/bytecode-vm/src/main/java/com/example/Main.java
-/home/velhinho/Desktop/other/bytecode-vm/src/main/java/com/example/Push.java
-/home/velhinho/Desktop/other/bytecode-vm/src/main/java/com/example/Print.java
-/home/velhinho/Desktop/other/bytecode-vm/src/main/java/com/example/Instruction.java
+/home/velhinho/Desktop/other/bytecode-vm-java/src/main/java/com/example/Main.java
+/home/velhinho/Desktop/other/bytecode-vm-java/src/main/java/com/example/Print.java
+/home/velhinho/Desktop/other/bytecode-vm-java/src/main/java/com/example/Environment.java
+/home/velhinho/Desktop/other/bytecode-vm-java/src/main/java/com/example/Read.java
+/home/velhinho/Desktop/other/bytecode-vm-java/src/main/java/com/example/Jmp.java
+/home/velhinho/Desktop/other/bytecode-vm-java/src/main/java/com/example/Add.java
+/home/velhinho/Desktop/other/bytecode-vm-java/src/main/java/com/example/Instruction.java
+/home/velhinho/Desktop/other/bytecode-vm-java/src/main/java/com/example/Sub.java
+/home/velhinho/Desktop/other/bytecode-vm-java/src/main/java/com/example/Push.java
+/home/velhinho/Desktop/other/bytecode-vm-java/src/main/java/com/example/Halt.java

@@ -1,6 +1,9 @@
+com/example/Read.class
 com/example/Environment.class
+com/example/Halt.class
 com/example/Instruction.class
 com/example/Add.class
+com/example/Jmp.class
 com/example/Main.class
 com/example/Print.class
 com/example/Sub.class

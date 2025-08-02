@@ -5,6 +5,28 @@ import java.util.Deque;
 
 public class Environment {
   private final Deque<Integer> stack = new ArrayDeque<>();
+  private int pc = 0;
+  private boolean halted = false;
+
+  public void setHalted(boolean halted) {
+    this.halted = halted;
+  }
+
+  public boolean isHalted() {
+    return halted;
+  }
+
+  public int getPc() {
+    return pc;
+  }
+
+  public void setPc(int pc) {
+    this.pc = pc;
+  }
+
+  public void incPc() {
+    pc++;
+  }
 
   public void push(int n) {
     stack.push(n);
@@ -18,10 +40,10 @@ public class Environment {
     return stack.pop();
   }
 
-  public void printTop() {
+  public int peekTop() {
     if (stack.isEmpty()) {
       throw new RuntimeException("empty stack");
     }
-    System.out.println(stack.peek());
+    return stack.peek();
   }
 }

@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Main {
   public static Instruction parseLine(String line) {
-    String[] parts = line.trim().toUpperCase().split("\\s+");
+    var parts = line.trim().toUpperCase().split("\\s+");
     if (parts.length == 0) {
       throw new IllegalArgumentException("Empty instruction line");
     }
@@ -20,16 +20,24 @@ public class Main {
         }
         yield new Push(Integer.parseInt(parts[1]));
       }
+      case "JMP" -> {
+        if (parts.length != 2) {
+          throw new IllegalArgumentException("JMP requires an address");
+        }
+        yield new Jmp(Integer.parseInt(parts[1]));
+      }
       case "ADD" -> new Add();
       case "SUB" -> new Sub();
       case "PRINT" -> new Print();
+      case "READ" -> new Read();
+      case "HALT" -> new Halt();
       default -> throw new IllegalArgumentException("Unknown instruction: " + parts[0]);
     };
   }
 
   public static List<Instruction> parse(String data) {
-    List<Instruction> instructions = new ArrayList<>();
-    String[] lines = data.split("\\r?\\n");
+    var instructions = new ArrayList<Instruction>();
+    var lines = data.split("\\r?\\n");
     for (String line : lines) {
       if (!line.trim().isEmpty()) {
         instructions.add(parseLine(line));
@@ -39,16 +47,22 @@ public class Main {
   }
 
   public static void execInstructions(List<Instruction> instructions) {
-    Environment env = new Environment();
-    for (Instruction instr : instructions) {
-      instr.exec(env);
+    var env = new Environment();
+    try {
+      while (!env.isHalted()) {
+        instructions.get(env.getPc()).exec(env);
+        env.incPc();
+      }
+    } catch (IndexOutOfBoundsException e) {
+      e.printStackTrace(System.err);
+      System.err.println("Illegal jump");
     }
   }
 
   public static void main(String[] args) {
     try {
-      String data = Files.readString(Paths.get("test.byte"));
-      List<Instruction> instructions = parse(data);
+      var data = Files.readString(Paths.get("test.byte"));
+      var instructions = parse(data);
       execInstructions(instructions);
     } catch (IOException e) {
       System.err.println("Failed to read file: " + e.getMessage());
