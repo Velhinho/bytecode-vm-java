@@ -27,7 +27,7 @@ public class Main {
             "Consecutive labels at line: %d and line: %d",
             addresses.get(i),
             addresses.get(i+1));
-        throw new RuntimeException(err_msg);
+        throw new IllegalArgumentException(err_msg);
       }
     }
   }
@@ -39,7 +39,7 @@ public class Main {
         var label = line.split(" ")[1];
         var address = labels.get(label);
         if (address == null) {
-          throw new RuntimeException(String.format("label %s never doesn't exist", label));
+          throw new IllegalArgumentException(String.format("label %s never doesn't exist", label));
         }
         no_labels.add("JMP " + address);
       } else if (!line.endsWith(":")) {
@@ -64,7 +64,7 @@ public class Main {
       case "JMP" -> new Jmp(address);
       case "JNZ" -> new Jnz(address);
       case "JZ" -> new Jz(address);
-      default -> throw new RuntimeException("Unknown jump instruction");
+      default -> throw new IllegalArgumentException("Unknown jump instruction");
     };
   }
 
