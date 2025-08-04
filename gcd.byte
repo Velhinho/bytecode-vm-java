@@ -2,14 +2,23 @@ READ
 DEFINE_GLOBAL a
 READ
 DEFINE_GLOBAL b
+GET_GLOBAL a
+DEFINE_GLOBAL temp
 
-GET_LOCAL b ; [b]
-GET_LOCAL a ; [a, b]
-GET_LOCAL b ; [b, a, b]
-REM         ; [a%b, b]
-
-SWAP    ; [a, b]
+loop:
+GET_GLOBAL b
+JZ done
+GET_GLOBAL a
+SET_GLOBAL temp
+GET_GLOBAL b
+SET_GLOBAL a
+GET_GLOBAL temp
+GET_GLOBAL b
 REM
+SET_GLOBAL b
+JMP loop
 
 done:
-POP     ; [a]
+GET_GLOBAL a
+PRINT
+HALT

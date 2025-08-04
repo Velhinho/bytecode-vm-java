@@ -166,7 +166,7 @@ public class Main {
 
   public static void main(String[] args) {
     try {
-      var data = Files.readString(Paths.get("factorial.byte"));
+      var data = Files.readString(Paths.get("gcd.byte"));
       var lines = removeEmptyLines(data.split("\\r?\\n"));
       var no_labels = parseLabels(lines);
       var instructions = parse(no_labels);
