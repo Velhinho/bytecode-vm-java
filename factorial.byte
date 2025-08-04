@@ -2,6 +2,7 @@ READ
 DEFINE_GLOBAL n
 PUSH 1
 DEFINE_GLOBAL result
+
 loop:
 GET_GLOBAL n
 JZ done
@@ -14,6 +15,7 @@ PUSH 1
 SUB
 SET_GLOBAL n
 JMP loop
+
 done:
 GET_GLOBAL result
 PRINT

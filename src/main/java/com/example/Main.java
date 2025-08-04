@@ -5,6 +5,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class Main {
   private static HashMap<String, Integer> findLabels(String[] lines) {
@@ -153,10 +154,20 @@ public class Main {
     }
   }
 
+  private static String[] removeEmptyLines(String[] lines) {
+    var ret = new ArrayList<String>();
+    for (String line : lines) {
+      if (!Objects.equals(line, "")) {
+        ret.add(line);
+      }
+    }
+    return ret.toArray(new String[0]);
+  }
+
   public static void main(String[] args) {
     try {
       var data = Files.readString(Paths.get("factorial.byte"));
-      var lines = data.split("\\r?\\n");
+      var lines = removeEmptyLines(data.split("\\r?\\n"));
       var no_labels = parseLabels(lines);
       var instructions = parse(no_labels);
       execInstructions(instructions);
