@@ -7,18 +7,22 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Main {
-  private static HashMap<String, Integer> find_labels(String[] lines) {
+  private static HashMap<String, Integer> findLabels(String[] lines) {
     var labels = new HashMap<String, Integer>();
     for (var i = 0; i < lines.length; i++) {
       var line = lines[i];
       if (line.endsWith(":")) {
-        labels.put(line.substring(0, line.length() - 1), i);
+        var label_name = line.substring(0, line.length() - 1);
+        if (labels.containsKey(label_name)) {
+          throw new IllegalArgumentException(String.format("label %s define twice", label_name));
+        }
+        labels.put(label_name, i);
       }
     }
     return labels;
   }
 
-  private static void check_consecutive_labels(HashMap<String, Integer> labels) {
+  private static void checkConsecutiveLabels(HashMap<String, Integer> labels) {
     var addresses = new ArrayList<>(labels.values());
     var size = addresses.size();
     for (var i = 0; i < size - 1; i++) {
@@ -32,32 +36,38 @@ public class Main {
     }
   }
 
-  private static String[] replace_labels(String[] lines, HashMap<String, Integer> labels) {
+  private static boolean isJumpInst(String line) {
+    return line.startsWith("JMP") || line.startsWith("JZ") || line.startsWith("JNZ");
+  }
+
+  private static String[] replaceLabels(String[] lines, HashMap<String, Integer> labels) {
     var no_labels = new ArrayList<String>();
     for (var line : lines) {
-      if (line.startsWith("JMP")) {
-        var label = line.split(" ")[1];
+      if (isJumpInst(line)) {
+        var parts = line.split(" ");
+        var op_code = parts[0];
+        var label = parts[1];
         var address = labels.get(label);
         if (address == null) {
-          throw new IllegalArgumentException(String.format("label %s never doesn't exist", label));
+          throw new IllegalArgumentException(String.format("label %s doesn't exist", label));
         }
-        no_labels.add("JMP " + address);
-      } else if (!line.endsWith(":")) {
+        no_labels.add(String.format("%s %s", op_code, address));
+      } else {
         no_labels.add(line);
       }
     }
     return no_labels.toArray(new String[0]);
   }
 
-  public static String[] parse_labels(String[] lines) {
-    var labels = find_labels(lines);
-    check_consecutive_labels(labels);
-    return replace_labels(lines, labels);
+  public static String[] parseLabels(String[] lines) {
+    var labels = findLabels(lines);
+    checkConsecutiveLabels(labels);
+    return replaceLabels(lines, labels);
   }
 
   private static Instruction parseJump(String opcode, String[] parts) {
     if (parts.length != 2) {
-        throw new IllegalArgumentException("JZ requires an address");
+        throw new IllegalArgumentException(String.format("%s requires an address", opcode));
     }
     var address = Integer.parseInt(parts[1]);
     return switch (opcode) {
@@ -68,8 +78,21 @@ public class Main {
     };
   }
 
+  private static Instruction parseVariable(String opcode, String[] parts) {
+    if (parts.length != 2) {
+      throw new IllegalArgumentException(String.format("%s requires an name", opcode));
+    }
+    var name = parts[1];
+    return switch (opcode) {
+      case "DEFINE_GLOBAL" -> new DefineGlobal(name);
+      case "GET_GLOBAL" -> new GetGlobal(name);
+      case "SET_GLOBAL" -> new SetGlobal(name);
+      default -> throw new IllegalArgumentException("Unknown jump instruction");
+    };
+  }
+
   public static Instruction parseLine(String line) {
-    var parts = line.trim().toUpperCase().split("\\s+");
+    var parts = line.trim().split("\\s+");
     if (parts.length == 0) {
       throw new IllegalArgumentException("Empty instruction line");
     }
@@ -81,13 +104,25 @@ public class Main {
         }
         yield new Push(Integer.parseInt(parts[1]));
       }
+      case "DEFINE_GLOBAL", "GET_GLOBAL", "SET_GLOBAL" ->
+          parseVariable(parts[0], parts);
       case "JMP", "JNZ", "JZ" -> parseJump(parts[0], parts);
       case "ADD" -> new Add();
       case "SUB" -> new Sub();
+      case "MUL" -> new Mul();
+      case "REM" -> new Rem();
+      case "POP" -> new Pop();
       case "PRINT" -> new Print();
       case "READ" -> new Read();
       case "HALT" -> new Halt();
-      default -> throw new IllegalArgumentException("Unknown instruction: " + parts[0]);
+      default -> {
+        if (line.endsWith(":")) {
+          yield new Label();
+        }
+        else {
+          throw new IllegalArgumentException("Unknown instruction: " + parts[0]);
+        }
+      }
     };
   }
 
@@ -105,20 +140,24 @@ public class Main {
     var env = new Environment();
     try {
       while (!env.isHalted()) {
-        instructions.get(env.getPc()).exec(env);
+        var inst = instructions.get(env.getPc());
+        inst.exec(env);
         env.incPc();
       }
     } catch (IndexOutOfBoundsException e) {
       e.printStackTrace(System.err);
       System.err.println("Illegal jump");
+    } catch (Exception e) {
+      e.printStackTrace(System.err);
+      System.err.println("PC =" + env.getPc());
     }
   }
 
   public static void main(String[] args) {
     try {
-      var data = Files.readString(Paths.get("test.byte"));
+      var data = Files.readString(Paths.get("factorial.byte"));
       var lines = data.split("\\r?\\n");
-      var no_labels = parse_labels(lines);
+      var no_labels = parseLabels(lines);
       var instructions = parse(no_labels);
       execInstructions(instructions);
     } catch (Exception e) {

@@ -3,8 +3,8 @@ package com.example;
 public class Add implements Instruction {
   @Override
   public void exec(Environment env) {
-    int a = env.pop();
     int b = env.pop();
+    int a = env.pop();
     env.push(a + b);
   }
 }

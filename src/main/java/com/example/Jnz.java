@@ -9,8 +9,8 @@ public class Jnz implements Instruction {
 
   @Override
   public void exec(Environment env) {
-    if (env.pop() != 0) {
-      env.pop();
+    var top = env.pop();
+    if (top != 0) {
       env.setPc(address - 1);
     }
   }

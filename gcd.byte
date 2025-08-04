@@ -1,0 +1,15 @@
+READ
+DEFINE_GLOBAL a
+READ
+DEFINE_GLOBAL b
+
+GET_LOCAL b ; [b]
+GET_LOCAL a ; [a, b]
+GET_LOCAL b ; [b, a, b]
+REM         ; [a%b, b]
+
+SWAP    ; [a, b]
+REM
+
+done:
+POP     ; [a]
