@@ -1,4 +1,6 @@
-package com.example;
+package com.example.instructions;
+
+import com.example.Environment;
 
 public class Jmp implements Instruction {
   private final int address;

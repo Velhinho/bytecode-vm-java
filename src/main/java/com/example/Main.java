@@ -1,5 +1,7 @@
 package com.example;
 
+import com.example.instructions.*;
+
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -139,8 +141,9 @@ public class Main {
 
   public static void execInstructions(List<Instruction> instructions) {
     var env = new Environment();
+    var size = instructions.size();
     try {
-      while (!env.isHalted()) {
+      while (!env.isHalted() || env.getPc() < size) {
         var inst = instructions.get(env.getPc());
         inst.exec(env);
         env.incPc();

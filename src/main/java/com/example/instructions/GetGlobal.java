@@ -1,4 +1,6 @@
-package com.example;
+package com.example.instructions;
+
+import com.example.Environment;
 
 public class GetGlobal implements Instruction {
   private final String name;

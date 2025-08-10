@@ -1,4 +1,6 @@
-package com.example;
+package com.example.instructions;
+
+import com.example.Environment;
 
 public class Push implements Instruction {
   private final int num;
