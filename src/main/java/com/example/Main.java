@@ -143,7 +143,7 @@ public class Main {
     var env = new Environment();
     var size = instructions.size();
     try {
-      while (!env.isHalted() || env.getPc() < size) {
+      while (!env.isHalted() && env.getPc() < size) {
         var inst = instructions.get(env.getPc());
         inst.exec(env);
         env.incPc();
