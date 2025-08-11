@@ -40,7 +40,9 @@ public class Main {
   }
 
   private static boolean isJumpInst(String line) {
-    return line.startsWith("JMP") || line.startsWith("JZ") || line.startsWith("JNZ");
+    return line.startsWith("JMP")
+        || line.startsWith("JZ")
+        || line.startsWith("JNZ");
   }
 
   private static String[] replaceLabels(String[] lines, HashMap<String, Integer> labels) {
@@ -55,6 +57,16 @@ public class Main {
           throw new IllegalArgumentException(String.format("label %s doesn't exist", label));
         }
         no_labels.add(String.format("%s %s", op_code, address));
+      } else if (line.startsWith("CALL")) {
+        var parts = line.split(" ");
+        var op_code = parts[0];
+        var label = parts[1];
+        var numLocals = parts[2];
+        var address = labels.get(label);
+        if (address == null) {
+          throw new IllegalArgumentException(String.format("label %s doesn't exist", label));
+        }
+        no_labels.add(String.format("%s %s %s", op_code, address, numLocals));
       } else {
         no_labels.add(line);
       }
@@ -81,7 +93,7 @@ public class Main {
     };
   }
 
-  private static Instruction parseVariable(String opcode, String[] parts) {
+  private static Instruction parseGlobal(String opcode, String[] parts) {
     if (parts.length != 2) {
       throw new IllegalArgumentException(String.format("%s requires an name", opcode));
     }
@@ -90,7 +102,19 @@ public class Main {
       case "DEFINE_GLOBAL" -> new DefineGlobal(name);
       case "GET_GLOBAL" -> new GetGlobal(name);
       case "SET_GLOBAL" -> new SetGlobal(name);
-      default -> throw new IllegalArgumentException("Unknown jump instruction");
+      default -> throw new IllegalArgumentException("Unknown global instruction");
+    };
+  }
+
+  public static Instruction parseLocal(String opcode, String[] parts) {
+    if (parts.length != 2) {
+      throw new IllegalArgumentException(String.format("%s requires an index", opcode));
+    }
+    var index = Integer.parseInt(parts[1]);
+    return switch (opcode) {
+      case "SET_LOCAL" -> new SetLocal(index);
+      case "GET_LOCAL" -> new GetLocal(index);
+      default -> throw new IllegalArgumentException("Unknown local instruction");
     };
   }
 
@@ -107,8 +131,19 @@ public class Main {
         }
         yield new Push(Integer.parseInt(parts[1]));
       }
+      case "CALL" -> {
+        if (parts.length != 3) {
+          for (String part : parts) {
+            System.out.println(part);
+          }
+          throw new IllegalArgumentException("CALL requires a name and numLocals");
+        }
+        yield new Call(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
+      }
       case "DEFINE_GLOBAL", "GET_GLOBAL", "SET_GLOBAL" ->
-          parseVariable(parts[0], parts);
+          parseGlobal(parts[0], parts);
+      case "GET_LOCAL", "SET_LOCAL" ->
+          parseLocal(parts[0], parts);
       case "JMP", "JNZ", "JZ" -> parseJump(parts[0], parts);
       case "ADD" -> new Add();
       case "SUB" -> new Sub();
@@ -118,6 +153,7 @@ public class Main {
       case "PRINT" -> new Print();
       case "READ" -> new Read();
       case "HALT" -> new Halt();
+      case "RET" -> new Ret();
       default -> {
         if (line.endsWith(":")) {
           yield new Label();
@@ -145,6 +181,7 @@ public class Main {
     try {
       while (!env.isHalted() && env.getPc() < size) {
         var inst = instructions.get(env.getPc());
+        System.out.println(inst);
         inst.exec(env);
         env.incPc();
       }

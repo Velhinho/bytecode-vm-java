@@ -4,6 +4,9 @@ com/example/instructions/Jz.class
 com/example/instructions/Read.class
 com/example/instructions/Instruction.class
 com/example/instructions/Print.class
+com/example/instructions/GetLocal.class
+com/example/CallInfo.class
+com/example/instructions/Call.class
 com/example/instructions/GetGlobal.class
 com/example/instructions/DefineGlobal.class
 com/example/instructions/Push.class
@@ -16,4 +19,6 @@ com/example/Environment.class
 com/example/instructions/Jmp.class
 com/example/instructions/Halt.class
 com/example/Main.class
+com/example/instructions/SetLocal.class
+com/example/instructions/Ret.class
 com/example/instructions/Jnz.class

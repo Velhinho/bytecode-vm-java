@@ -1,15 +1,25 @@
 package com.example;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.Optional;
+import java.util.*;
 
 public class Environment {
   private final Deque<Integer> stack = new ArrayDeque<>();
   private final HashMap<String, Integer> globals = new HashMap<>();
   private int pc = 0;
   private boolean halted = false;
+  private Deque<CallInfo> callStack = new ArrayDeque<>();
+
+  public void pushCall(CallInfo callInfo) {
+    callStack.push(callInfo);
+  }
+
+  public CallInfo popCall() {
+    return callStack.pop();
+  }
+
+  public CallInfo currentStack() {
+    return callStack.peek();
+  }
 
   public int getGlobal(String name) {
     return Optional.ofNullable(globals.get(name))
