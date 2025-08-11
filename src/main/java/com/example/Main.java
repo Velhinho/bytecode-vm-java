@@ -1,6 +1,16 @@
 package com.example;
 
 import com.example.instructions.*;
+import com.example.instructions.arithmetic.Add;
+import com.example.instructions.arithmetic.Mul;
+import com.example.instructions.arithmetic.Rem;
+import com.example.instructions.arithmetic.Sub;
+import com.example.instructions.globals.DefineGlobal;
+import com.example.instructions.globals.GetGlobal;
+import com.example.instructions.globals.SetGlobal;
+import com.example.instructions.jumps.*;
+import com.example.instructions.locals.GetLocal;
+import com.example.instructions.locals.SetLocal;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;

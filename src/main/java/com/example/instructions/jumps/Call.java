@@ -1,7 +1,8 @@
-package com.example.instructions;
+package com.example.instructions.jumps;
 
 import com.example.CallInfo;
 import com.example.Environment;
+import com.example.instructions.Instruction;
 
 import java.util.ArrayList;
 

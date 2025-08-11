@@ -1,6 +1,7 @@
-package com.example.instructions;
+package com.example.instructions.globals;
 
 import com.example.Environment;
+import com.example.instructions.Instruction;
 
 public class SetGlobal implements Instruction {
   private final String name;

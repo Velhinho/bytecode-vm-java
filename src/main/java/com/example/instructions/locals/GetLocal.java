@@ -1,6 +1,7 @@
-package com.example.instructions;
+package com.example.instructions.locals;
 
 import com.example.Environment;
+import com.example.instructions.Instruction;
 
 public class GetLocal implements Instruction {
   private final int index;

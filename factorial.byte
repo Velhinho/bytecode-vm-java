@@ -20,3 +20,24 @@ done:
 GET_GLOBAL result
 PRINT
 HALT
+
+READ
+CALL fact 2
+PRINT
+HALT
+
+fact:
+PUSH 1
+SET_LOCAL 1
+fact_while:
+GET_LOCAL 0
+PUSH 1
+SUB
+fact_done:
+
+def fact(n):
+    ret = 1
+    while n > 1:
+        ret = ret * n
+        n = n + 1
+    return ret

@@ -1,6 +1,7 @@
-package com.example.instructions;
+package com.example.instructions.jumps;
 
 import com.example.Environment;
+import com.example.instructions.Instruction;
 
 public class Ret implements Instruction {
   @Override

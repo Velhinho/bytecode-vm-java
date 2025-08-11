@@ -1,6 +1,7 @@
-package com.example.instructions;
+package com.example.instructions.arithmetic;
 
 import com.example.Environment;
+import com.example.instructions.Instruction;
 
 public class Add implements Instruction {
   @Override
