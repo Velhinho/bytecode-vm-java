@@ -10,7 +10,9 @@ import com.example.instructions.globals.GetGlobal;
 import com.example.instructions.globals.SetGlobal;
 import com.example.instructions.jumps.*;
 import com.example.instructions.locals.GetLocal;
+import com.example.instructions.locals.PushLocal;
 import com.example.instructions.locals.SetLocal;
+import com.example.instructions.logic.GT;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -154,11 +156,13 @@ public class Main {
           parseGlobal(parts[0], parts);
       case "GET_LOCAL", "SET_LOCAL" ->
           parseLocal(parts[0], parts);
+      case "PUSH_LOCAL" -> new PushLocal();
       case "JMP", "JNZ", "JZ" -> parseJump(parts[0], parts);
       case "ADD" -> new Add();
       case "SUB" -> new Sub();
       case "MUL" -> new Mul();
       case "REM" -> new Rem();
+      case "GT" -> new GT();
       case "POP" -> new Pop();
       case "PRINT" -> new Print();
       case "READ" -> new Read();
@@ -216,7 +220,7 @@ public class Main {
 
   public static void main(String[] args) {
     try {
-      var data = Files.readString(Paths.get("gcd.byte"));
+      var data = Files.readString(Paths.get("factorial.byte"));
       var lines = removeEmptyLines(data.split("\\r?\\n"));
       var no_labels = parseLabels(lines);
       var instructions = parse(no_labels);
