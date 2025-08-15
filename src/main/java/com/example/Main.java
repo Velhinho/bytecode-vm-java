@@ -10,7 +10,7 @@ import com.example.instructions.globals.GetGlobal;
 import com.example.instructions.globals.SetGlobal;
 import com.example.instructions.jumps.*;
 import com.example.instructions.locals.GetLocal;
-import com.example.instructions.locals.PushLocal;
+import com.example.instructions.locals.CreateLocal;
 import com.example.instructions.locals.SetLocal;
 import com.example.instructions.logic.GT;
 
@@ -156,7 +156,7 @@ public class Main {
           parseGlobal(parts[0], parts);
       case "GET_LOCAL", "SET_LOCAL" ->
           parseLocal(parts[0], parts);
-      case "PUSH_LOCAL" -> new PushLocal();
+      case "CREATE_LOCAL" -> new CreateLocal();
       case "JMP", "JNZ", "JZ" -> parseJump(parts[0], parts);
       case "ADD" -> new Add();
       case "SUB" -> new Sub();

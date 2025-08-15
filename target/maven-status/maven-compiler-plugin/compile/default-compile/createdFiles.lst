@@ -15,12 +15,12 @@ com/example/instructions/arithmetic/Mul.class
 com/example/Main.class
 com/example/instructions/locals/GetLocal.class
 com/example/instructions/arithmetic/Add.class
-com/example/instructions/locals/PushLocal.class
 com/example/instructions/jumps/Jnz.class
 com/example/instructions/jumps/Jz.class
 com/example/CallInfo.class
 com/example/instructions/jumps/Jmp.class
 com/example/instructions/Push.class
 com/example/instructions/jumps/Call.class
+com/example/instructions/locals/CreateLocal.class
 com/example/instructions/Halt.class
 com/example/instructions/locals/SetLocal.class
